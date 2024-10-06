@@ -43,17 +43,37 @@ ELK Setup
 
 input {
   file {
-	//set your path
-	path => "C:/Users/path/my.log"
-	start_position => "beginning"
+    path => "C:/Users/service1/logs/service1.log"
+    start_position => "beginning"
+    tags => ["service1"]
   }
+  
+  file {
+    path => "C:/Users/service2/logs/service2.log"
+    start_position => "beginning"
+    tags => ["service2"]
+  }
+
+  file {
+    path => "C:/Users/service3/logs/service3.log"
+    start_position => "beginning"
+    tags => ["service3"]
+  }
+}
+
+filter {
+  # Additional filters can be applied here if needed
 }
 
 output {
   elasticsearch {
     hosts => ["http://localhost:9200"]
+    index => "microservices-logs-%{+YYYY.MM.dd}"
   }
+  
+  stdout { codec => rubydebug }
 }
+
 9 - Run logstash server using below command
 	logstash -f logstash-sample.conf
 	cmd>logstash -f C:\logstash\logstash-8.15.2\config\logstash-sample.conf
